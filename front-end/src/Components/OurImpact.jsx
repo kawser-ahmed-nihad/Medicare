@@ -6,8 +6,7 @@ import award from '../assets/svg-icon/award.svg'
 import starsvgrepocom from '../assets/svg-icon/star-svgrepo-com.svg'
 import videoImage from '../assets/svg-icon/video-image-container.svg'
 import right from '../assets/svg-icon/right.svg'
-import calendar from '../assets/svg-icon/calendar.svg'
-import phone from '../assets/svg-icon/phone.svg'
+import aw from '../assets/svg-icon/award (2).svg'
 import { Calendar, Phone } from 'lucide-react'
 
 const OurImpact = () => {
@@ -70,7 +69,7 @@ const OurImpact = () => {
 
                 </div>
 
-                <div className='mx-4  flex items-start rounded-md py-12 gap-4 '>
+                <div className='mx-4 relative flex items-start rounded-md py-12 gap-4 '>
                     <div className=''>
                         <h2 className='text-2xl text-center font-bold uppercase text-[#0066FE]'>Why Choose Us </h2>
                         <h1 className='text-3xl text-center font-semibold text-[#0A1931] mt-2'>
@@ -123,9 +122,24 @@ const OurImpact = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='ml-auto rounded-md '>
+                    <div className='ml-auto rounded-2xl '>
                         <img src={videoImage} alt="male" className='w-[600px] h-[400px]' />
                     </div>
+
+                    <div className='bg-white absolute bottom-12 right-0 rounded-2xl p-3 shadow-md '>
+
+                        <div className='flex items-center gap-3'>
+                            <div className='w-10 h-10 rounded-full bg-[#FEF3C7] flex items-center justify-center shrink-0'>
+                                <img src={aw} alt="male   " className='w-6 h-6' />
+                            </div>
+                            <div>
+                                <h1 className='text-[#0A1931] font-extrabold text-[16px] '>20+ </h1>
+                                <p className='text-[#4A5568] text-[14px]'>Years of Excellence</p>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <div className='mx-4 flex items-center bg-[#0066FE] rounded-2xl p-12'>

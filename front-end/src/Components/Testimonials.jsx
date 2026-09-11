@@ -95,13 +95,13 @@ const Testimonials = () => {
 
     
         <div className="mb-10 text-center">
-          <p className="mb-2 text-2xl font-bold uppercase tracking-wide text-[#2787E8]">
+          <p className="mb-2 text-2xl font-bold uppercase tracking-wide text-[#0066FE]">
             Testimonials
           </p>
 
-          <h2 className="text-3xl font-bold text-[#14213D] sm:text-3xl md:text-[32px]">
+          <h2 className="text-3xl font-bold text-[#0A1931] sm:text-3xl md:text-[32px]">
             What Our Patients{" "}
-            <span className="text-[#1683E8]">Say</span>
+            <span className="text-[#0066FE]">Say</span>
           </h2>
         </div>
 
