@@ -8,9 +8,9 @@ import HealthNews from '../../Components/HealthNews'
 const Home = () => {
   return (
     <div className=''>
-      {/* <Hero /> */}
-      {/* <OurServices /> */}
-      {/* <OurImpact /> */}
+      <Hero />
+      <OurServices />
+      <OurImpact />
       <Testimonials />
       <HealthNews />
     </div>
