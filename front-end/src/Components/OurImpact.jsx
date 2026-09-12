@@ -743,8 +743,8 @@ const OurImpact = () => {
                             className="
                                 bg-white
                                 absolute
-                                bottom-0
-                                right-0 
+                                bottom-2
+                                right-2 
                                 rounded-2xl
                                 p-3
                                 shadow-md
