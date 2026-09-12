@@ -95,7 +95,7 @@ const Navbar = () => {
 
                         <li>
                             <NavLink
-                                to="/find-doctors"
+                                to="/services"
                                 className={({ isActive }) => `
                                     relative py-2 transition-all duration-300
                                     ${isActive

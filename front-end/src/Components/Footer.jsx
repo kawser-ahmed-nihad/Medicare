@@ -33,7 +33,7 @@ const Footer = () => {
   return (
     <footer className="border-t  bg-linear-to-r to-[#142744] from-[#0A1628]  border-[#EEF3F8] ">
 
-      <div className="mx-auto max-w-7xl px-5 py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-9 py-20">
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
 
