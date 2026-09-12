@@ -5,6 +5,7 @@ import Root from "../Layout/Root";
 import Home from "../Pages/Home/Home";
 import MedicalServicesPage from "../Pages/Home/MedicalServicesPage";
 import Aboutpage from "../Pages/Home/Aboutpage";
+import Contactpage from "../Pages/Home/Contactpage";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
             {
                 path: 'about',
                 Component: Aboutpage
+            },
+            {
+                path: 'contact',
+                Component: Contactpage
             }
         ]
 
