@@ -106,8 +106,8 @@ const Contactpage = () => {
 
 
             {/* Hero */}
-            <section className="bg-[#f8fbfe] ">
-                <div className='max-w-7xl mx-auto px-4 pt-26 sm:px-6 lg:px-9'>
+            <section className="bg-[#f0f8fe] ">
+                <div className='max-w-7xl mx-auto px-4 pb-10 pt-26 sm:px-6 lg:px-9'>
                     <p className="mb-4 flex items-center gap-1 text-xs text-[#4A5568]">
                         Home <span>›</span> <span className="text-[#4A5568]">Contact</span>
                     </p>
@@ -147,7 +147,7 @@ const Contactpage = () => {
             </section>
 
             {/* Form + Map */}
-            <section className="max-w-7xl mx-auto px-4 pt-26 sm:px-6 lg:px-9">
+            <section className="max-w-7xl mx-auto pb-10 px-4 pt-26 sm:px-6 lg:px-9">
                 <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
                     {/* Form */}
                     <div>
