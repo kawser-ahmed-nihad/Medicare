@@ -16,6 +16,7 @@ import {
     ChevronLeft,
     ChevronRight,
 } from "lucide-react";
+import { Link } from 'react-router';
 
 const stats = [
     { icon: Users, value: "50+", label: "Qualified Doctors" },
@@ -223,10 +224,12 @@ function DoctorCard({ doctor }) {
             </div>
 
             <div className="mt-4 flex gap-2">
-                <button className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2 text-[10px] font-semibold text-[#4A5568] hover:border-blue-400 hover:text-[#0066FE] transition-colors">
+                <Link
+                to={`/doctors/:doctorId`}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-2 text-[10px] font-semibold text-[#4A5568] hover:border-blue-400 hover:text-[#0066FE] transition-colors">
                     <Eye size={13} />
                     View Details
-                </button>
+                </Link>
                 <button className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0066FE] px-0.5 py-2 text-[10px] font-semibold text-white hover:bg-blue-700 transition-colors">
                     <Calendar size={13} />
                     Book Appointment

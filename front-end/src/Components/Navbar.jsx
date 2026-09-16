@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router'
+import { Link, NavLink } from 'react-router'
 import { Menu, X } from 'lucide-react'
 
 const Navbar = () => {
@@ -217,7 +217,8 @@ const Navbar = () => {
 
                 {/* Desktop Appointment Button */}
                 <div className='hidden lg:block'>
-                    <button
+                    <Link
+                    to='/auth/login'
                         className="
                             bg-[#1A73E8]
                             text-white font-semibold
@@ -233,7 +234,7 @@ const Navbar = () => {
                         "
                     >
                         Book Appointment
-                    </button>
+                    </Link>
                 </div>
 
 
@@ -305,7 +306,7 @@ const Navbar = () => {
                         <li>
                             <NavLink
                                 onClick={() => setMenuOpen(false)}
-                                to="/find-doctors"
+                                to="/services"
                                 className={({ isActive }) => `
                                     block px-4 py-3 rounded-xl
                                     font-semibold
@@ -338,23 +339,7 @@ const Navbar = () => {
                             </NavLink>
                         </li>
 
-                        <li>
-                            <NavLink
-                                onClick={() => setMenuOpen(false)}
-                                to="/find-doctors"
-                                className={({ isActive }) => `
-                                    block px-4 py-3 rounded-xl
-                                    font-semibold
-                                    transition-all duration-300
-                                    ${isActive
-                                        ? 'bg-[#EAF3FF] text-[#1A73E8] translate-x-1'
-                                        : 'text-[#4A5568] hover:bg-gray-50 hover:text-[#1A73E8]'
-                                    }
-                                `}
-                            >
-                                Blog
-                            </NavLink>
-                        </li>
+                       
 
                         <li>
                             <NavLink
@@ -396,7 +381,8 @@ const Navbar = () => {
 
 
                     {/* Mobile Appointment */}
-                    <button
+                    <Link
+                    to='/auth/login'
                         className="
                             w-full
                             mt-4
@@ -412,7 +398,7 @@ const Navbar = () => {
                         "
                     >
                         Book Appointment
-                    </button>
+                    </Link>
 
                 </div>
 

@@ -124,6 +124,7 @@ const Hero = () => {
                   rounded-xl
                   px-5
                   py-3
+                  cursor-pointer
                   transition-all
                   duration-300
                   w-full
@@ -148,6 +149,7 @@ const Hero = () => {
                   justify-center
                   outline
                   outline-2
+                  cursor-pointer
                   outline-[#E2E8F0]
                   bg-transparent
                   text-black
