@@ -1,5 +1,5 @@
 import express from "express";
-import { requireAuth, requireRole } from "../middleware/auth.JS";
+import { requireAuth, requireRole } from "../middleware/auth.js";
 import { uploadChatFile } from "../utils/cloudinary.js";
 import {
     startConversation, getMyConversations, getMessages, sendMessage, uploadAttachment, adminGetAllConversations,
