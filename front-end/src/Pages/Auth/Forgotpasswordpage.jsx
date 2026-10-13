@@ -1,8 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Mail, Lock, ArrowLeft } from "lucide-react";
+import { toast } from 'react-toastify';
+import useAxios from '../../hooks/useAxios';
 
 const Forgotpasswordpage = () => {
+    const [loading, setLoading] = useState(false);
+    const axiosInstance = useAxios();
+
+    const handleemailSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        const email = e.target.email.value;
+
+
+        try {
+            const res = await axiosInstance.post('api/auth/forgot-password', { email });
+            // Handle the successful password-reset request.
+            toast.success(res.data?.message || "Please check your email.");
+
+        } catch (err) {
+            console.log(err)
+            toast.error(err.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false); // Stop loading whether the request succeeds or fails.
+        }
+    };
+
+
     return (
         <div>
             <div className="flex min-h-screen w-full ">
@@ -190,25 +215,30 @@ const Forgotpasswordpage = () => {
 
                                 <div className="mt-6 space-y-4">
                                     <div>
-                                        <label className="mb-1.5 block text-xs font-medium text-[#4A5568]">
-                                            Email Address
-                                        </label>
-                                        <div className="relative">
-                                            <Mail
-                                                size={15}
-                                                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                                            />
-                                            <input
-                                                type="email"
-                                                placeholder="Enter your email"
-                                                className="w-full rounded-lg border border-slate-200 py-2.5 pl-9 pr-4 text-sm outline-none focus:border-blue-400"
-                                            />
-                                        </div>
+                                        <form onSubmit={handleemailSubmit}>
+
+                                            <label className="mb-1.5 block text-xs font-medium text-[#4A5568]">
+                                                Email Address
+                                            </label>
+                                            <div className="relative">
+                                                <Mail
+                                                    size={15}
+                                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                                                />
+                                                <input
+                                                    name='email'
+                                                    type="email"
+                                                    placeholder="Enter your email"
+                                                    className="w-full rounded-lg border border-slate-200 py-2.5 pl-9 pr-4 text-sm outline-none focus:border-blue-400"
+                                                />
+                                            </div>
+                                            <button className="w-full mt-4 rounded-lg bg-[#0066FE] py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
+                                                Send Reset Link
+                                            </button>
+                                        </form>
                                     </div>
 
-                                    <button className="w-full rounded-lg bg-[#0066FE] py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
-                                        Send Reset Link
-                                    </button>
+
 
                                     <div className="flex items-center gap-3 text-xs text-[#4A5568]">
                                         <span className="h-px flex-1 bg-slate-200" />

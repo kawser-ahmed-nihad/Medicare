@@ -12,13 +12,13 @@ const AuthLayout = () => {
 
 
     return (
-       
+
         <>
             <div>
                 <div className="flex min-h-screen w-full ">
                     <div className="grid w-full  grid-cols-1  overflow-hidden  bg-white  sm:grid-cols-2">
                         {/* Brand / illustration side */}
-                        <div className="relative flex flex-col  justify-center  bg-gradient-to-br
+                        <div className="relative hidden md:block flex flex-col  justify-center  bg-gradient-to-br
             from-[#F8FBFE]
              via-[#EAF4FC]
             to-[#DCEEFF] p-14">
@@ -38,9 +38,9 @@ const AuthLayout = () => {
                             </div>
 
 
-                            <div className='flex items-center relative max-w-[570px] md:mt '>
+                            <div className='flex hidden md:block items-center relative max-w-[570px] md:mt '>
                                 <div>
-                                    <h1 className='text-xl text-left font-bold text-[#4A5568]'>Welcome Back!</h1>
+                                    <h1 className='text-xl md:mt-8 text-left font-bold text-[#4A5568]'>Welcome Back!</h1>
                                     <h2 className='text-3xl text-left mt-3 font-bold text-[#0A1931]'> Take the First Step
                                         Toward <br />
                                         {""} <span className='text-[#0066FE]'>better health </span></h2>
@@ -151,17 +151,7 @@ const AuthLayout = () => {
 
 
                                 </div>
-                                <div className='bg-white  md:hidden lg:block rounded-2xl -mt-28 w-12 h-12 absolute right-0'>
-                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="24" cy="24" r="23"
-                                            fill="" />
-                                        <rect x="18" y="11" width="12" height="26" rx="3"
-                                            fill="#1479F5" />
-                                        <rect x="11" y="18" width="26" height="12" rx="3"
-                                            fill="#1479F5" />
-                                    </svg>
-                                </div>
+
                                 <div className=' md:hidden lg:block  -bottom-20 right-0 absolute'>
                                     <div
                                         className="
@@ -292,6 +282,17 @@ const AuthLayout = () => {
                                         </div>
 
                                     </div>
+                                </div>
+                                <div className='bg-white  md:hidden lg:block rounded-2xl z-10 top-28 w-12 h-12 absolute right-0'>
+                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="24" cy="24" r="23"
+                                            fill="" />
+                                        <rect x="18" y="11" width="12" height="26" rx="3"
+                                            fill="#1479F5" />
+                                        <rect x="11" y="18" width="26" height="12" rx="3"
+                                            fill="#1479F5" />
+                                    </svg>
                                 </div>
                             </div>
 

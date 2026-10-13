@@ -1,38 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { AuthContext } from './AuthContext';
 import axios from 'axios';
+import router from '../Router/router.jsx'; // Adjust the path to router.jsx as needed.
+
+const axiosPublic = axios.create({
+    baseURL: "http://localhost:3000",
+    withCredentials: true,
+});
 
 const AuthProvider = ({ children }) => {
     const [accessToken, setAccessToken] = useState(null);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const axiosPublic = axios.create({
-        baseURL: "http://localhost:3000",
-        withCredentials: true,
-    });
+    const refreshPromiseRef = useRef(null);
 
-    // Page refresh হলে Cookie দিয়ে নতুন token নাও
-    useEffect(() => {
-        const refresh = async () => {
-            try {
-                const res = await axiosPublic.post(
-                    "/api/auth/refresh-token",
-                    {},
-                    { withCredentials: true }
-                );
-                // console.log("Refresh response:", res.data);
+    const refreshAccessToken = useCallback(() => {
+        if (refreshPromiseRef.current) {
+            return refreshPromiseRef.current;
+        }
+
+        refreshPromiseRef.current = axiosPublic
+            .post("/api/auth/refresh", {}, { withCredentials: true })
+            .then((res) => {
                 setAccessToken(res.data.accessToken);
                 setUser(res.data.user);
-            } catch (err) {
-                // console.log("Refresh error:", err.response?.data); // ← error দেখো
+                return res.data.accessToken;
+            })
+            .catch((err) => {
                 setAccessToken(null);
                 setUser(null);
-            } finally {
-                setLoading(false);
-            }
-        };
-        refresh();
+                throw err;
+            })
+            .finally(() => {
+                refreshPromiseRef.current = null;
+            });
+
+        return refreshPromiseRef.current;
+    }, []);
+
+    useEffect(() => {
+        refreshAccessToken()
+            .then(() => {
+                const redirectTo = localStorage.getItem("postLoginRedirect");
+                if (redirectTo) {
+                    localStorage.removeItem("postLoginRedirect");
+                    router.navigate(redirectTo, { replace: true }); // Use this instead of useNavigate().
+                }
+            })
+            .catch(() => {
+                localStorage.removeItem("postLoginRedirect");
+            })
+            .finally(() => setLoading(false));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const login = (token, userData) => {
@@ -40,25 +60,18 @@ const AuthProvider = ({ children }) => {
         setUser(userData);
     };
 
-
-
     const logout = async () => {
         try {
             await axiosPublic.post("/api/auth/logout");
+        } catch (err) {
+            console.log("Logout error:", err.response?.data);
+        } finally {
             setAccessToken(null);
             setUser(null);
-        } catch (err) {
-            console.log("Logout error:", err.response?.data); // ← add করো
         }
     };
 
-    const userInfo = {
-        accessToken,
-        user,
-        login,
-        logout,
-        loading
-    }
+    const userInfo = { accessToken, user, login, logout, loading, refreshAccessToken };
 
     return (
         <AuthContext.Provider value={userInfo}>

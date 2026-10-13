@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import { useEffect } from "react";
 import useAuth from "./useAuth";
 
@@ -9,17 +8,15 @@ const axiosSecure = axios.create({
 });
 
 const useAxiosSecure = () => {
-    const { accessToken, setAccessToken } = useAuth(); 
+    const { accessToken, refreshAccessToken } = useAuth(); // setAccessToken is no longer needed here.
 
     useEffect(() => {
-        const requestInterceptor = axiosSecure.interceptors.request.use(
-            (config) => {
-                if (accessToken) {
-                    config.headers.Authorization = `Bearer ${accessToken}`;
-                }
-                return config;
+        const requestInterceptor = axiosSecure.interceptors.request.use((config) => {
+            if (accessToken) {
+                config.headers.Authorization = `Bearer ${accessToken}`;
             }
-        );
+            return config;
+        });
 
         const responseInterceptor = axiosSecure.interceptors.response.use(
             (res) => res,
@@ -29,15 +26,8 @@ const useAxiosSecure = () => {
                 if (error.response?.status === 401 && !original._retry) {
                     original._retry = true;
                     try {
-                        const res = await axios.post(
-                            "http://localhost:3000/api/auth/refresh-token",
-                            {},
-                            { withCredentials: true }
-                        );
-
-                        const newToken = res.data.accessToken;
-                        setAccessToken(newToken);
-
+                        // Use AuthProvider's shared, deduplicated refresh function instead of refreshing separately here.
+                        const newToken = await refreshAccessToken();
                         original.headers.Authorization = `Bearer ${newToken}`;
                         return axiosSecure(original);
                     } catch {
@@ -53,9 +43,9 @@ const useAxiosSecure = () => {
             axiosSecure.interceptors.request.eject(requestInterceptor);
             axiosSecure.interceptors.response.eject(responseInterceptor);
         };
-    }, [accessToken, setAccessToken]);
+    }, [accessToken, refreshAccessToken]);
 
-    return axiosSecure; 
+    return axiosSecure;
 };
 
 export default useAxiosSecure;

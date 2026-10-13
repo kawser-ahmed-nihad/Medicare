@@ -1,171 +1,215 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useNavigate, Link } from 'react-router';
+import { CheckCircle2, XCircle, Loader2, RefreshCw } from 'lucide-react';
+import useAxios from '../../hooks/useAxios';
+import { toast } from 'react-toastify';
+
+const RESEND_COOLDOWN_SECONDS = 60;
 
 const VerifyEmail = () => {
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get('token'); // Read the 'token' query parameter from the URL.
+    const axiosInstance = useAxios();
 
-    const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-    
-    const inputRefs = useRef([]);
+    const [status, setStatus] = useState('verifying'); // 'verifying' | 'success' | 'error'
+    const [message, setMessage] = useState('Verifying your email, please wait...');
+    const navigate = useNavigate();
 
-    const handleChange = (index, value) => {
-        if (!/^\d*$/.test(value)) return;
-        const newOtp = [...otp];
-        newOtp[index] = value;
-        setOtp(newOtp);
-        if (value && index < 5) {
-            inputRefs.current[index + 1].focus();
+    // ---- Resend verification state ----
+    // Email saved to localStorage after successful registration on the Register page.
+    // (In Register.jsx: localStorage.setItem('pendingVerificationEmail', data.email))
+    const knownEmail = localStorage.getItem('pendingVerificationEmail') || '';
+
+    // When VerifyEmail loads.
+    console.log('Read:', knownEmail);
+    const [isResending, setIsResending] = useState(false);
+    const [resendSent, setResendSent] = useState(false);
+    const [cooldown, setCooldown] = useState(0);
+
+    useEffect(() => {
+        const handleEmailVerification = async () => {
+            if (!token) {
+                setStatus('error');
+                setMessage('Verification token is missing or invalid.');
+                return;
+            }
+
+            try {
+                // Send a request to the backend's email verification API.
+                const res = await axiosInstance.post('/api/auth/verify-email', { token });
+
+                if (res.data?.success || res.status === 200) {
+                    setStatus('success');
+                    setMessage(res.data?.message || 'Your email has been successfully verified!');
+                    toast.success('Email verified successfully!');
+                    localStorage.removeItem('pendingVerificationEmail'); // No longer needed.
+
+                    // Automatically redirect to the login page after 3 seconds.
+                    setTimeout(() => {
+                        navigate('/auth/login');
+                    }, 3000);
+                }
+            } catch (err) {
+                console.error(err);
+                setStatus('error');
+                setMessage(
+                    err.response?.data?.message ||
+                    'Email verification failed or the link has expired.'
+                );
+                toast.error('Verification failed!');
+            }
+        };
+
+        handleEmailVerification();
+    }, [token, navigate]);
+
+    // Cooldown timer — counts down every second once a resend has been sent
+    useEffect(() => {
+        if (cooldown <= 0) return;
+        const timer = setInterval(() => {
+            setCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [cooldown]);
+
+    const handleResendVerification = async () => {
+        if (!knownEmail) return;
+
+        setIsResending(true);
+        try {
+            // The backend always returns a generic success message to prevent email enumeration,
+            // so this response is expected even if the account does not exist.
+            const res = await axiosInstance.post('/api/auth/resend-verification', {
+                email: knownEmail,
+            });
+
+            setResendSent(true);
+            setCooldown(RESEND_COOLDOWN_SECONDS);
+            toast.success(
+                res.data?.message || 'If this account exists and is unverified, a new link has been sent.'
+            );
+        } catch (err) {
+            console.error(err);
+            // Handle cases where the backend rate limiter (authLimiter) is triggered.
+            toast.error(err.response?.data?.message || 'Something went wrong. Please try again.');
+        } finally {
+            setIsResending(false);
         }
     };
-
-    const handleKeyDown = (index, e) => {
-        if (e.key === "Backspace" && !otp[index] && index > 0) {
-            inputRefs.current[index - 1].focus();
-        }
-    };
-
-    const handlePaste = (e) => {
-        const paste = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
-        if (paste.length === 6) {
-            setOtp(paste.split(""));
-            inputRefs.current[5].focus();
-        }
-    };
-
 
     return (
-        <div>
-            <div className="flex min-h-screen w-full ">
-                <div className="grid w-full  grid-cols-1  overflow-hidden  bg-white shadow-sm shadow-slate-900/5 sm:grid-cols-2">
-                    {/* Brand / illustration side */}
-                    <div className="relative flex flex-col items-center justify-center bg-[#f8fbfe] p-8 text-center">
-                        <div className="absolute left-8 top-8">
-                            {/* Logo */}
-                            <div className='flex items-center mb-8 gap-1'>
-                                <img
-                                    className="h-9 w-9"
-                                    src="/public/logo-icon-bg.svg"
-                                    alt="Logo"
-                                />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+            <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
 
-                                <h1 className="text-xl font-bold">
-                                    Medicare
-                                </h1>
-                            </div>
-                        </div>
-
-
-                        <div className="relative  flex h-48 w-48 items-center justify-center">
-                            <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-
-                                <circle cx="90" cy="88" r="55" fill="#F7FBFF" />
-                                <circle cx="90" cy="88" r="53" stroke="#DCEEFF" />
-
-
-                                <ellipse cx="90" cy="137" rx="43" ry="5" fill="#DDEEFF" opacity="0.65" />
-
-
-                                <path
-                                    d="M90 40
-       C80 47 69 51 57 54
-       V81
-       C57 105 70 123 90 133
-       C110 123 123 105 123 81
-       V54
-       C111 51 100 47 90 40Z"
-                                    fill="#EAF4FF"
-                                    stroke="#C7E2FF"
-                                    stroke-width="2"
-                                />
-
-
-                                <path
-                                    d="M90 48
-       C81 54 72 57 65 59
-       V81
-       C65 99 75 113 90 121
-       C105 113 115 99 115 81
-       V59
-       C108 57 99 54 90 48Z"
-                                    fill="#DCEEFF"
-                                />
-
-
-                                <path
-                                    d="M69 84L83 98L111 68"
-                                    stroke="#1479F5"
-                                    stroke-width="8"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-
-
-                                <path
-                                    d="M64 61C74 58 82 54 90 48"
-                                    stroke="white"
-                                    stroke-width="3"
-                                    stroke-linecap="round"
-                                    opacity="0.9"
-                                />
-
-                            </svg>
-                        </div>
-
-                        <p className="mt-8 text-sm font-semibold text-slate-900">
-                            Verify to Secure
-                        </p>
-                        <p className="mt-1 max-w-[200px] text-xs text-slate-500">
-                            We send verification codes to
-                            keep your account secure.
-                        </p>
+                {/* 1. Verifying state (loading animation) */}
+                {status === 'verifying' && (
+                    <div className="space-y-4">
+                        <Loader2 className="w-16 h-16 text-[#1A73E8] animate-spin mx-auto" />
+                        <h2 className="text-2xl font-bold text-gray-800">Verifying Email...</h2>
+                        <p className="text-gray-500 text-sm">{message}</p>
                     </div>
+                )}
 
-                    {/* Form side */}
-                    <div className='w-full flex justify-center items-center   max-w-[470px] mx-auto'>
+                {/* 2. Success state */}
+                {status === 'success' && (
+                    <div className="space-y-4">
+                        <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto animate-bounce" />
+                        <h2 className="text-2xl font-bold text-gray-800">Account Verified!</h2>
+                        <p className="text-gray-600 text-sm">{message}</p>
+                        <p className="text-xs text-gray-400">Redirecting to login page in 3 seconds...</p>
 
-                        <div className="flex items-center p-8 sm:p-10">
-                            <div className="w-full">
-                                <h1 className="text-xl font-bold text-[#0A1931]">
-                                    Verify Your Email
-                                </h1>
-                                <p className="mt-1 text-sm text-[#4A5568]">
-                                    Enter the 6-digit code sent to
-                                </p>
-                                <p className="mt-1 text-sm text-[#0A1931]">
-                                    nihad.kawser@gmail.com
-                                </p>
+                        <div className="pt-2">
+                            <Link
+                                to="/auth/login"
+                                className="inline-block bg-[#1A73E8] text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#155FC0] transition-colors"
+                            >
+                                Login Now
+                            </Link>
+                        </div>
+                    </div>
+                )}
 
-                                <div className="mt-6 relative space-y-4">
+                {/* 3. Error / expired state */}
+                {status === 'error' && (
+                    <div className="space-y-4">
+                        <XCircle className="w-16 h-16 text-red-500 mx-auto" />
+                        <h2 className="text-2xl font-bold text-gray-800">Verification Failed</h2>
+                        <p className="text-red-500 text-sm">{message}</p>
 
-
-                                    <div className="flex justify-center gap-3 mb-6">
-                                        {otp.map((digit, index) => (
-                                            <input
-                                                key={index}
-                                                ref={(el) => (inputRefs.current[index] = el)}
-                                                type="text"
-                                                maxLength={1}
-                                                value={digit}
-                                                onChange={(e) => handleChange(index, e.target.value)}
-                                                onKeyDown={(e) => handleKeyDown(index, e)}
-                                                onPaste={handlePaste}
-                                                className="w-12 h-12 text-center mt-2 border-b border-gray-200 focus:border-[#ffb84b] focus:border-b outline-none px-3 py-3"
-                                            />
-                                        ))}
+                        <div className="pt-2">
+                            {knownEmail ? (
+                                !resendSent ? (
+                                    <div className="space-y-3">
+                                        <p className="text-xs text-gray-500">
+                                            Didn't get the link? We'll resend it to{' '}
+                                            <span className="font-medium text-gray-700">{knownEmail}</span>
+                                        </p>
+                                        <button
+                                            type="button"
+                                            onClick={handleResendVerification}
+                                            disabled={isResending || cooldown > 0}
+                                            className="w-full flex items-center justify-center gap-2 bg-[#1A73E8] text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#155FC0] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isResending ? (
+                                                <>
+                                                    <Loader2 size={16} className="animate-spin" />
+                                                    Sending...
+                                                </>
+                                            ) : cooldown > 0 ? (
+                                                `Resend in ${cooldown}s`
+                                            ) : (
+                                                <>
+                                                    <RefreshCw size={16} />
+                                                    Resend Verification Email
+                                                </>
+                                            )}
+                                        </button>
                                     </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <CheckCircle2 className="w-10 h-10 text-green-500 mx-auto" />
+                                        <p className="text-sm text-gray-600">
+                                            A new verification link has been sent to{' '}
+                                            <span className="font-medium">{knownEmail}</span>. Please check your inbox.
+                                        </p>
+                                        {cooldown > 0 ? (
+                                            <p className="text-xs text-gray-400">
+                                                You can request another link in {cooldown}s
+                                            </p>
+                                        ) : (
+                                            <button
+                                                onClick={handleResendVerification}
+                                                className="text-xs font-semibold text-[#1A73E8] hover:underline"
+                                            >
+                                                Didn't get it? Send again
+                                            </button>
+                                        )}
+                                    </div>
+                                )
+                            ) : (
+                                // No email is stored in localStorage (for example, if the user switched devices or browsers, or cleared the cache).
+                                // Offer only the option to return to registration or sign-in, without manual input.
+                                <p className="text-xs text-gray-500">
+                                    We couldn't find your email on this device. Please try registering
+                                    again or sign in to request a new link.
+                                </p>
+                            )}
 
-                                    <button className="w-full rounded-lg bg-[#0066FE] py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
-                                        Verify & Continue
-                                    </button>
-
-
-                                </div>
+                            <div className="pt-4">
+                                <Link
+                                    to="/auth/login"
+                                    className="text-xs text-gray-500 hover:text-[#1A73E8] hover:underline"
+                                >
+                                    Back to Login
+                                </Link>
                             </div>
                         </div>
                     </div>
-                </div>
+                )}
+
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default VerifyEmail
+export default VerifyEmail;
