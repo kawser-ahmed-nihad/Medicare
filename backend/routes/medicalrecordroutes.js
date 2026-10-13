@@ -1,7 +1,7 @@
 import express from "express";
 import { requireAuth, requireRole } from "../middleware/auth.js";
 import { uploadChatFile } from "../utils/cloudinary.js";
-import { createRecord, getMyRecords, getPatientRecords } from "../controllers/medicalRecordController.js";
+import { createRecord, getMyRecords, getPatientRecords } from "../controllers/medicalrecordcontroller.js";
 
 const router = express.Router();
 
