@@ -1,7 +1,7 @@
 import express from "express";
 import { createDoctor, getDoctors, getDoctorById, getDepartmentCounts, adminListDoctors, updateDoctorStatus, deleteDoctor } from "../controllers/doctorController.js";
 import { upload } from "../utils/cloudinary.js";
-import { requireAuth, requireRole } from "../middleware/auth.JS";
+import { requireAuth, requireRole } from "../middleware/auth.js";
 
 const router = express.Router();
 
