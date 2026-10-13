@@ -1,5 +1,5 @@
 import express from "express";
-import { requireAuth, requireRole } from "../middleware/auth.JS";
+import { requireAuth, requireRole } from "../middleware/auth.js";
 import { initiatePayment, paymentSuccess, paymentFail, paymentCancel, paymentIPN, adminPaymentsSummary, adminPaymentsList } from "../controllers/paymentController.js";
 
 const router = express.Router();
