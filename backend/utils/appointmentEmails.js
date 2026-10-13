@@ -1,7 +1,7 @@
 import * as appointmentRepo from "../model/appointmentRepository.js";
 import * as doctorRepo from "../model/doctorRepository.js";
 import * as userRepo from "../model/userRepository.js";
-import { appointmentConfirmationEmailTemplate, sendEmail } from "./sendEmail.js";
+import { appointmentConfirmationEmailTemplate, sendEmail } from "./sendemail.js";
 
 export async function sendAppointmentConfirmationEmail(appointmentId) {
     try {
