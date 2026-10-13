@@ -1,5 +1,5 @@
-import { verifyAccessToken } from "../utils/tokenUtils.js";
 import * as userRepo from "../model/userRepository.js";
+import { verifyAccessToken } from "../utils/tokenutils.js";
 
 /**
  * Requires a Bearer access token in the Authorization header.
