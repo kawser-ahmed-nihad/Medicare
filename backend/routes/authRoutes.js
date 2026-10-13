@@ -19,7 +19,6 @@ import {
 } from "../controllers/authController.js";
 
 import { requireAuth, requireRole } from "../middleware/auth.js";
-import { authLimiter, loginLimiter } from "../middleware/rateLimiter.js";
 import {
     validate,
     registerRules,
@@ -36,14 +35,14 @@ const router = express.Router();
 router.post("/register", authLimiter, upload.single("avatar"), register);
 router.get("/verify-email", verifyEmail);
 router.post("/verify-email", verifyEmail);
-router.post("/resend-verification", authLimiter, emailOnlyRules, validate, resendVerification);
+router.post("/resend-verification",  emailOnlyRules, validate, resendVerification);
 
-router.post("/login", loginLimiter, login);
+router.post("/login", login);
 router.post("/refresh", refresh);
 router.post("/logout", logout);
 
-router.post("/forgot-password", authLimiter, emailOnlyRules, validate, forgotPassword);
-router.post("/reset-password", authLimiter, resetPasswordRules, validate, resetPassword);
+router.post("/forgot-password",    forgotPassword);
+router.post("/reset-password",  resetPassword);
 router.post("/verify-reset-token", verifyResetToken);
 router.get("/me", requireAuth, getMe);
 
