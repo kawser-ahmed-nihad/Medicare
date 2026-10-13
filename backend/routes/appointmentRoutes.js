@@ -1,6 +1,6 @@
 import express from "express";
 import { cancelAppointment, createAppointment, getMyAppointments, getAppointmentById, getDoctorAppointments, markAppointmentCompleted, adminListAppointments, adminAppointmentCalendar } from "../controllers/appointmentController.js";
-import { requireAuth, requireRole } from "../middleware/auth.js";
+import { requireAuth, requireRole } from "../middleware/auth.JS";
 
 const router = express.Router();
 

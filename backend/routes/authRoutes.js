@@ -18,7 +18,7 @@ import {
     inviteDoctor,
 } from "../controllers/authController.js";
 
-import { requireAuth, requireRole } from "../middleware/auth.js";
+import { requireAuth, requireRole } from "../middleware/auth.JS";
 import { authLimiter, loginLimiter } from "../middleware/rateLimiter.js";
 import {
     validate,

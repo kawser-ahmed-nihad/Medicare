@@ -1,5 +1,5 @@
 import express from "express";
-import { requireAuth, requireRole } from "../middleware/auth.js";
+import { requireAuth, requireRole } from "../middleware/auth.JS";
 import { getMyPatients, adminListPatients, adminGetPatient } from "../controllers/patientController.js";
 
 const router = express.Router();

@@ -1,5 +1,5 @@
 import express from "express";
-import { requireAuth, requireRole } from "../middleware/auth.js";
+import { requireAuth, requireRole } from "../middleware/auth.JS";
 import { uploadChatFile } from "../utils/cloudinary.js";
 import { createRecord, getMyRecords, getPatientRecords } from "../controllers/medicalRecordController.js";
 
