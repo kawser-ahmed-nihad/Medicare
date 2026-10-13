@@ -20,7 +20,7 @@ const SocialLogin = () => {
         if (redirectPath) {
             localStorage.setItem("postLoginRedirect", redirectPath);
         }
-        window.location.href = `http://localhost:3000/api/auth/google`;
+        window.location.href = `https://medicare-s8om.onrender.com/api/auth/google`;
     };
 
     const handleGithubLogin = () => {
@@ -29,7 +29,7 @@ const SocialLogin = () => {
         if (redirectPath) {
             localStorage.setItem("postLoginRedirect", redirectPath);
         }
-        window.location.href = `http://localhost:3000/api/auth/github`;
+        window.location.href = `https://medicare-s8om.onrender.com/api/auth/github`;
     };
 
     return (

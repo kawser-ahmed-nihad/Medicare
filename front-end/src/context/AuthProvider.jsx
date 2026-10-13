@@ -4,7 +4,7 @@ import axios from 'axios';
 import router from '../Router/router.jsx'; // Adjust the path to router.jsx as needed.
 
 const axiosPublic = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "https://medicare-s8om.onrender.com",
     withCredentials: true,
 });
 

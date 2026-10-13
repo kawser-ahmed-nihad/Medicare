@@ -39,7 +39,7 @@ const Forgotpasswordpage = () => {
                             <div className='flex items-center mb-8 gap-1'>
                                 <img
                                     className="h-9 w-9"
-                                    src="/public/logo-icon-bg.svg"
+                                    src="/logo-icon-bg.svg"
                                     alt="Logo"
                                 />
 
