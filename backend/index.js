@@ -29,10 +29,13 @@ import notificationRoutes from "./routes/notificationRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 const port = process.env.PORT || 3000;
+import path from "node:path";
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static(path.join(process.cwd(), "public")));
 
 app.use(helmet());
 app.use(

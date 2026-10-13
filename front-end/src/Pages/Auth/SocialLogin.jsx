@@ -14,14 +14,31 @@ const SocialLogin = () => {
         return `${from.pathname || "/"}${from.search || ""}${from.hash || ""}`;
     };
 
+
     const handleGoogleLogin = () => {
+        console.log("🔵 Google Login button clicked");
+
         setLoadingProvider("google");
+
         const redirectPath = buildRedirectPath(location.state?.from);
+
+        console.log("📍 location.state?.from:", location.state?.from);
+        console.log("📍 Generated redirectPath:", redirectPath);
+
         if (redirectPath) {
             localStorage.setItem("postLoginRedirect", redirectPath);
+            console.log("✅ Saved postLoginRedirect:", localStorage.getItem("postLoginRedirect"));
+        } else {
+            console.log("ℹ️ No redirectPath to save");
         }
-        window.location.href = `https://medicare-s8om.onrender.com/api/auth/google`;
+
+        const googleAuthUrl = "https://medicare-s8om.onrender.com/api/auth/google";
+
+        console.log("🚀 Redirecting to Google Auth URL:", googleAuthUrl);
+
+        window.location.href = googleAuthUrl;
     };
+
 
     const handleGithubLogin = () => {
         setLoadingProvider("github");
