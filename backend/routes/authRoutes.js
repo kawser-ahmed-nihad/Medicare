@@ -32,7 +32,7 @@ const router = express.Router();
 
 /* ------------------------- Local email/password ------------------------- */
 
-router.post("/register", authLimiter, upload.single("avatar"), register);
+router.post("/register", upload.single("avatar"), register);
 router.get("/verify-email", verifyEmail);
 router.post("/verify-email", verifyEmail);
 router.post("/resend-verification",  emailOnlyRules, validate, resendVerification);
