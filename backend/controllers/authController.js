@@ -1,9 +1,9 @@
 import * as userRepo from "../model/userRepository.js";
 
-import { sendEmail, verificationEmailTemplate, resetPasswordEmailTemplate, doctorInviteEmailTemplate } from "../utils/sendEmail.js";
 import { setRefreshCookie, clearRefreshCookie, REFRESH_COOKIE_NAME } from "../utils/cookies.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
 import { createOneTimeToken, hashToken, signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/tokenutils.js";
+import { doctorInviteEmailTemplate, resetPasswordEmailTemplate, sendEmail, verificationEmailTemplate } from "../utils/sendEmail.js";
 
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_TIME_MS = 15 * 60 * 1000; // 15 minutes
