@@ -23,7 +23,7 @@ import { keyFor, markOnline, markOffline, getPresence } from "./utils/presence.j
 // Import verifyAccessToken and userRepo from the modules used by your authentication middleware.
 import * as userRepo from "./model/userRepository.js";
 import * as conversationRepo from "./model/conversationRepository.js";
-import { verifyAccessToken } from './utils/tokenUtils.js';
+import { verifyAccessToken } from './utils/tokenutils.js';
 import medicalRecordRoutes from "./routes/medicalrecordroutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
