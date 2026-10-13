@@ -7,7 +7,7 @@ import { doctorInviteEmailTemplate, resetPasswordEmailTemplate, sendEmail, verif
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_TIME_MS = 15 * 60 * 1000; // 15 minutes
 
-/* ---------------------------- helpers ---------------------------- */
+/* ----------------------------helpers---------------------------- */
 
 async function issueTokensForUser(res, user) {
     const accessToken = signAccessToken(user);
