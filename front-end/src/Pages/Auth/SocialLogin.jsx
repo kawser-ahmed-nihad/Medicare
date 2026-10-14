@@ -16,25 +16,25 @@ const SocialLogin = () => {
 
 
     const handleGoogleLogin = () => {
-        console.log("🔵 Google Login button clicked");
+        // console.log("🔵 Google Login button clicked");
 
         setLoadingProvider("google");
 
         const redirectPath = buildRedirectPath(location.state?.from);
 
-        console.log("📍 location.state?.from:", location.state?.from);
-        console.log("📍 Generated redirectPath:", redirectPath);
+        // console.log("📍 location.state?.from:", location.state?.from);
+        // console.log("📍 Generated redirectPath:", redirectPath);
 
         if (redirectPath) {
             localStorage.setItem("postLoginRedirect", redirectPath);
-            console.log("✅ Saved postLoginRedirect:", localStorage.getItem("postLoginRedirect"));
+            // console.log("✅ Saved postLoginRedirect:", localStorage.getItem("postLoginRedirect"));
         } else {
-            console.log("ℹ️ No redirectPath to save");
+            // console.log("ℹ️ No redirectPath to save");
         }
 
-        const googleAuthUrl = "https://medicare-s8om.onrender.com/api/auth/google";
+        const googleAuthUrl = "https://medicare-theta-seven.vercel.app/api/auth/google";
 
-        console.log("🚀 Redirecting to Google Auth URL:", googleAuthUrl);
+        // console.log("🚀 Redirecting to Google Auth URL:", googleAuthUrl);
 
         window.location.href = googleAuthUrl;
     };
@@ -46,7 +46,7 @@ const SocialLogin = () => {
         if (redirectPath) {
             localStorage.setItem("postLoginRedirect", redirectPath);
         }
-        window.location.href = `https://medicare-s8om.onrender.com/api/auth/github`;
+        window.location.href = `https://medicare-theta-seven.vercel.app/api/auth/github`;
     };
 
     return (

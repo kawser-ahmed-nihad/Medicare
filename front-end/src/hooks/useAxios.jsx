@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: `https://medicare-s8om.onrender.com`,
+    baseURL: `https://medicare-theta-seven.vercel.app`,
     withCredentials: true,
 })
 

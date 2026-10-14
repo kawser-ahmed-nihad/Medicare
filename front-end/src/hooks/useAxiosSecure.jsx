@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
-    baseURL: "https://medicare-s8om.onrender.com",
+    baseURL: "https://medicare-theta-seven.vercel.app",
     withCredentials: true,
 });
 
