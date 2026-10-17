@@ -1,23 +1,34 @@
 import nodemailer from "nodemailer";
+import { google } from "googleapis";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  family: 4,
-  auth: {
-    type: "OAuth2",
-    user: process.env.EMAIL_USER,
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-  },
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  "https://developers.google.com/oauthplayground"
+);
+oauth2Client.setCredentials({
+  refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+});
+
+const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+// Nodemailer 
+const composer = nodemailer.createTransport({
+  streamTransport: true,
+  buffer: true,
 });
 
 export async function sendEmail({ to, subject, html }) {
-  await transporter.sendMail({
+  const info = await composer.sendMail({
     from: process.env.EMAIL_FROM,
     to,
     subject,
     html,
+  });
+
+  await gmail.users.messages.send({
+    userId: "me",
+    requestBody: { raw: info.message.toString("base64url") },
   });
 }
 
