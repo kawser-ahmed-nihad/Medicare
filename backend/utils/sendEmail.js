@@ -2,12 +2,12 @@ import nodemailer from "nodemailer";
 import { google } from "googleapis";
 
 const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_ID,
+  process.env.GOOGLE_SECRET,
   "https://developers.google.com/oauthplayground"
 );
 oauth2Client.setCredentials({
-  refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+  refresh_token: process.env.GOOGLE_TOKEN,
 });
 
 const gmail = google.gmail({ version: "v1", auth: oauth2Client });

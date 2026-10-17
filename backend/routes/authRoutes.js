@@ -35,14 +35,14 @@ const router = express.Router();
 router.post("/register", upload.single("avatar"), register);
 router.get("/verify-email", verifyEmail);
 router.post("/verify-email", verifyEmail);
-router.post("/resend-verification",  emailOnlyRules, validate, resendVerification);
+router.post("/resend-verification", emailOnlyRules, validate, resendVerification);
 
 router.post("/login", login);
 router.post("/refresh", refresh);
 router.post("/logout", logout);
 
-router.post("/forgot-password",    forgotPassword);
-router.post("/reset-password",  resetPassword);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 router.post("/verify-reset-token", verifyResetToken);
 router.get("/me", requireAuth, getMe);
 

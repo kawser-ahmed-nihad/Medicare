@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
-    baseURL: "https://medicare-s8om.onrender.com",
+    baseURL: "http://localhost:3000",
     withCredentials: true,
 });
 

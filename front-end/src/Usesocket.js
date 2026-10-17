@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import useAuth from "./useAuth";
 
-const SERVER_URL = "https://medicare-s8om.onrender.com";
+const SERVER_URL = "http://localhost:3000";
 
 // One socket connection is shared across the app; previously, each component opened its own connection.
 let shared = { token: null, socket: null };
