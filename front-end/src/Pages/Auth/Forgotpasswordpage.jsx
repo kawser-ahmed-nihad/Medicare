@@ -20,7 +20,7 @@ const Forgotpasswordpage = () => {
             toast.success(res.data?.message || "Please check your email.");
 
         } catch (err) {
-            console.log(err)
+            // console.log(err)
             toast.error(err.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false); // Stop loading whether the request succeeds or fails.

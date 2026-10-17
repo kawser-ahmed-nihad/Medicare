@@ -32,7 +32,7 @@ const SocialLogin = () => {
             // console.log("ℹ️ No redirectPath to save");
         }
 
-        const googleAuthUrl = "https://medicare-theta-seven.vercel.app/api/auth/google";
+        const googleAuthUrl = "https://medicare-s8om.onrender.com/api/auth/google";
 
         // console.log("🚀 Redirecting to Google Auth URL:", googleAuthUrl);
 
@@ -46,7 +46,7 @@ const SocialLogin = () => {
         if (redirectPath) {
             localStorage.setItem("postLoginRedirect", redirectPath);
         }
-        window.location.href = `https://medicare-theta-seven.vercel.app/api/auth/github`;
+        window.location.href = `https://medicare-s8om.onrender.com/api/auth/github`;
     };
 
     return (

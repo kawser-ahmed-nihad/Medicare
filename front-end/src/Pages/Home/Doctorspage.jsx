@@ -112,8 +112,8 @@ function Checkbox({ label, checked, onChange }) {
     );
 }
 
-// Generic dropdown for the Department, Location, and Sort filters in the search bar.
-// Closes when the user clicks outside it.
+// Generic dropdown used for Department / Location / Sort in the search bar.
+// Closes itself on outside click.
 function Dropdown({ label, valueLabel, widthClass = "lg:w-44", children }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
@@ -149,6 +149,73 @@ function Dropdown({ label, valueLabel, widthClass = "lg:w-44", children }) {
     );
 }
 
+/* ---------------- image with loading shimmer + fallback ---------------- */
+
+// ছবি লোড হওয়া পর্যন্ত shimmer, ভাঙা লিংক হলে অক্ষরের avatar, আর মুখ যেন না কাটে তাই object-top
+function DoctorImage({ src, alt, fallback }) {
+    const [status, setStatus] = useState("loading"); // loading | loaded
+    const [current, setCurrent] = useState(src);
+    const imgRef = useRef(null);
+
+    useEffect(() => {
+        setCurrent(src);
+        setStatus("loading");
+    }, [src]);
+
+    // cache থেকে আসা ছবির onLoad আগেই চলে যেতে পারে, তাই আলাদা করে দেখি
+    useEffect(() => {
+        const el = imgRef.current;
+        if (el && el.complete && el.naturalWidth > 0) setStatus("loaded");
+    }, [current]);
+
+    return (
+        <div className="relative h-48 w-full overflow-hidden rounded-xl bg-slate-100">
+            {status === "loading" && <div className="absolute inset-0 animate-pulse bg-slate-200" />}
+            <img
+                ref={imgRef}
+                src={current}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setStatus("loaded")}
+                onError={() => {
+                    if (current !== fallback) setCurrent(fallback);
+                    else setStatus("loaded");
+                }}
+                className={`h-full w-full object-cover object-top transition-opacity duration-300 ${status === "loaded" ? "opacity-100" : "opacity-0"}`}
+            />
+        </div>
+    );
+}
+
+/* ---------------- skeleton card (DoctorCard-এর হুবহু আকার) ---------------- */
+
+function DoctorCardSkeleton() {
+    return (
+        <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm shadow-slate-900/5" aria-hidden="true">
+            <div className="h-48 w-full animate-pulse rounded-xl bg-slate-200" />
+
+            <div className="mt-3 flex items-start justify-between">
+                <div className="space-y-2">
+                    <div className="h-4 w-36 animate-pulse rounded bg-slate-200" />
+                    <div className="h-3 w-24 animate-pulse rounded bg-slate-100" />
+                </div>
+                <div className="h-4 w-4 animate-pulse rounded-full bg-slate-200" />
+            </div>
+
+            <div className="mt-3 h-3 w-32 animate-pulse rounded bg-slate-100" />
+
+            <div className="mt-3 space-y-2">
+                <div className="h-3 w-40 animate-pulse rounded bg-slate-100" />
+                <div className="h-3 w-48 animate-pulse rounded bg-slate-100" />
+                <div className="h-3 w-20 animate-pulse rounded bg-slate-100" />
+            </div>
+
+            <div className="mt-4 h-9 w-full animate-pulse rounded-lg bg-slate-100" />
+        </div>
+    );
+}
+
 function DoctorCard({ doctor }) {
     const fullName = `Dr. ${doctor.first_name} ${doctor.last_name}`;
     const role = doctor.designation || doctor.department;
@@ -162,11 +229,7 @@ function DoctorCard({ doctor }) {
     return (
         <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm shadow-slate-900/5">
             <div className="relative">
-                <img
-                    src={image}
-                    alt={fullName}
-                    className="h-40 w-full rounded-xl object-cover bg-slate-50"
-                />
+                <DoctorImage src={image} alt={fullName} fallback={`${DEFAULT_AVATAR}${encodeURIComponent(fullName)}`} />
                 {isAvailable && (
                     <span className="absolute right-2 top-2 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-600">
                         Available
@@ -290,7 +353,7 @@ const Doctorspage = () => {
         queryKey: ["doctor-department-counts"],
         queryFn: async () => {
             const res = await axiosSecure.get("/api/doctors/meta/department-counts");
-            return res.data.counts;
+            return res.data.counts; // [{ _id: "Cardiology", count: 12 }, ...]
         },
         staleTime: 5 * 60 * 1000,
     });
@@ -328,10 +391,8 @@ const Doctorspage = () => {
             const res = await axiosSecure.get(`/api/doctors/`, { params: buildQueryParams() });
             return res.data; // { success, doctors, pagination }
         },
-        keepPreviousData: true,
+        placeholderData: (prev) => prev, // ফিল্টার/পেজ বদলালে আগের ডেটা থাকে, শুধু প্রথম লোডে skeleton
     });
-
-    // console.log(data)
 
     const doctors = data?.doctors ?? [];
     const pagination = data?.pagination ?? { total: 0, page: 1, totalPages: 1, limit: PAGE_SIZE };
@@ -591,7 +652,7 @@ const Doctorspage = () => {
                         <div className="flex-1">
                             <p className="mb-4 text-sm text-[#4A5568]">
                                 {isLoading
-                                    ? "Loading doctors…"
+                                    ? <span className="inline-block h-4 w-52 animate-pulse rounded bg-slate-200 align-middle" />
                                     : `Showing ${rangeStart} – ${rangeEnd} of ${total} doctors`}
                                 {isFetching && !isLoading && <span className="ml-2 text-xs text-slate-400">Updating…</span>}
                             </p>
@@ -611,10 +672,10 @@ const Doctorspage = () => {
                                 </div>
                             )}
 
-                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                                {doctors.map((doctor) => (
-                                    <DoctorCard key={doctor._id} doctor={doctor} />
-                                ))}
+                            <div className={`grid grid-cols-1 gap-5 transition-opacity duration-200 sm:grid-cols-2 lg:grid-cols-3 ${isFetching && !isLoading ? "opacity-60" : "opacity-100"}`}>
+                                {isLoading
+                                    ? Array.from({ length: PAGE_SIZE }).map((_, i) => <DoctorCardSkeleton key={i} />)
+                                    : doctors.map((doctor) => <DoctorCard key={doctor._id} doctor={doctor} />)}
                             </div>
 
                             {/* Pagination */}

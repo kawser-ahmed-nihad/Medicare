@@ -335,7 +335,7 @@ function PatientMixCard({ patientMix }) {
 /* ------------------------------------------------------------------ */
 
 function RecentAppointments({ appointments }) {
-    console.log(appointments);
+    // console.log(appointments);
     return (
         <Card>
             <CardTitle action={<ViewAll to="/dashboard/appointment-management" />}>Recent Appointments</CardTitle>
@@ -596,7 +596,7 @@ export default function OverviewPage() {
         },
     });
 
-    console.log(data)
+    // console.log(data)
 
     if (isLoading) {
         return (

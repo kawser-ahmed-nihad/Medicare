@@ -21,7 +21,7 @@ const VerifyEmail = () => {
     const knownEmail = localStorage.getItem('pendingVerificationEmail') || '';
 
     // When VerifyEmail loads.
-    console.log('Read:', knownEmail);
+    // console.log('Read:', knownEmail);
     const [isResending, setIsResending] = useState(false);
     const [resendSent, setResendSent] = useState(false);
     const [cooldown, setCooldown] = useState(0);

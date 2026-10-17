@@ -4,7 +4,7 @@ import axios from 'axios';
 import router from '../Router/router.jsx'; // Adjust the path to router.jsx as needed.
 
 const axiosPublic = axios.create({
-    baseURL: "https://medicare-theta-seven.vercel.app",
+    baseURL: "https://medicare-s8om.onrender.com",
     withCredentials: true,
 });
 
@@ -64,8 +64,8 @@ const AuthProvider = ({ children }) => {
         try {
             await axiosPublic.post("/api/auth/logout");
         } catch (err) {
-            console.log("Logout error:", err.response?.data);
-        } finally {
+            // console.log("Logout error:", err.response?.data);
+        } finally {  
             setAccessToken(null);
             setUser(null);
         }

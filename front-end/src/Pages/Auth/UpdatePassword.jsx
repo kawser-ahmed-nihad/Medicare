@@ -116,6 +116,7 @@ const UpdatePassword = () => {
                 // e.g. localStorage / auth context / redirect to dashboard
                 // localStorage.setItem("accessToken", res.data.accessToken);
                 // navigate("/doctor/dashboard");
+                navigate("/auth/login");
             }
         } catch (err) {
             console.error(err);
