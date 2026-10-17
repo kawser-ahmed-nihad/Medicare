@@ -19,17 +19,22 @@ const composer = nodemailer.createTransport({
 });
 
 export async function sendEmail({ to, subject, html }) {
-  const info = await composer.sendMail({
-    from: process.env.EMAIL_FROM,
-    to,
-    subject,
-    html,
-  });
+  try {
+    const info = await composer.sendMail({
+      from: process.env.EMAIL_FROM,
+      to,
+      subject,
+      html,
+    });
 
-  await gmail.users.messages.send({
-    userId: "me",
-    requestBody: { raw: info.message.toString("base64url") },
-  });
+    await gmail.users.messages.send({
+      userId: "me",
+      requestBody: { raw: info.message.toString("base64url") },
+    });
+  } catch (err) {
+    console.error("GMAIL ERROR:", err.response?.data || err.message);
+    throw err;
+  }
 }
 
 export function verificationEmailTemplate(name, verifyUrl) {
