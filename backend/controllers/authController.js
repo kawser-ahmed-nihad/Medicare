@@ -66,13 +66,15 @@ export async function register(req, res, next) {
             message: "Account created. Please check your email to verify your account.",
         });
     } catch (err) {
-        if (err.code === 11000) {
-            return res.status(200).json({
-                success: true,
-                message: "If this email can be registered, a verification link has been sent.",
-            });
-        }
-        next(err);
+        console.error("REGISTER MAIL ERROR:", err.response?.data || err.message);
+        return res.status(500).json({ message: err.response?.data?.error || err.message });
+        // if (err.code === 11000) {
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: "If this email can be registered, a verification link has been sent.",
+        //     });
+        // }
+        // next(err);
     }
 }
 

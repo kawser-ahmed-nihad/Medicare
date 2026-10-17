@@ -143,9 +143,11 @@ const Register = () => {
                 );
             }
 
+            console.log("resigister", res);
+
         } catch (err) {
             console.error(err);
-
+            console.error("REGISTER MAIL ERROR:", err.response?.data || err.message);
             toast.error(
                 err.response?.data?.message ||
                 err.response?.data?.error ||
